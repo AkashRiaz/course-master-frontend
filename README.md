@@ -1,7 +1,7 @@
 # CourseMaster - Frontend
-Live Link: https://course-master4981.netlify.app/
+Frontend Repo: https://github.com/AkashRiaz/course-master-frontend
+Backend Repo: https://github.com/AkashRiaz/course-master-backend
 
-Video link: https://drive.google.com/file/d/1vjMrBxr0-7xqjxMX2EBEBw30D_av1pOu/view
 
 A modern E-learning platform frontend built with React, Redux Toolkit, and Tailwind CSS.
 
