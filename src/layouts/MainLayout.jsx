@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../components/shared/Navbar";
@@ -8,7 +8,9 @@ import { fetchMyEnrollments } from "../store/slices/enrollmentSlice";
 
 export default function MainLayout() {
     const dispatch = useDispatch();
+    const location = useLocation();
     const { token, isAuthenticated } = useSelector((state) => state.auth);
+    const isAdminRoute = location.pathname.startsWith("/admin");
 
     useEffect(() => {
         if (token && !isAuthenticated) {
@@ -24,13 +26,18 @@ export default function MainLayout() {
 
     return (
         <div className="min-h-screen flex flex-col">
-            <Navbar />
+            {!isAdminRoute && <Navbar />}
 
-            <main className="flex-1 max-w-6xl mx-auto w-full px-2 sm:px-4 py-2 sm:py-4">
+            <main
+                className={`flex-1 w-full ${isAdminRoute
+                    ? "max-w-none px-0 py-0"
+                    : "max-w-6xl mx-auto px-2 sm:px-4 py-2 sm:py-4"
+                    }`}
+            >
                 <Outlet />
             </main>
 
-            <Footer />
+            {!isAdminRoute && <Footer />}
         </div>
     );
 }

@@ -158,7 +158,7 @@ export default function StudentDashboard() {
         <div className="container mx-auto px-4 py-4 space-y-4 lg:space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <h1 className="text-2xl sm:text-3xl font-bold">My Courses</h1>
-                <Link to="/" className="btn btn-outline btn-sm sm:btn-md w-full sm:w-auto">
+                <Link to="/courses" className="btn btn-outline btn-sm sm:btn-md w-full sm:w-auto">
                     Browse More Courses
                 </Link>
             </div>
@@ -176,7 +176,7 @@ export default function StudentDashboard() {
                         <p className="text-base-content/70">
                             Start your learning journey by enrolling in a course
                         </p>
-                        <Link to="/" className="btn btn-primary w-fit mx-auto mt-4">
+                        <Link to="/courses" className="btn btn-primary w-fit mx-auto mt-4">
                             Browse Courses
                         </Link>
                     </div>
@@ -188,6 +188,20 @@ export default function StudentDashboard() {
                         const isExpanded = expandedCourse === courseId;
                         const stats = courseStats[courseId];
                         const isLoading = loadingStats[courseId];
+                        const completedLessons =
+                            enrollment.progress?.completedLessons?.length || 0;
+                        const totalLessons =
+                            stats?.courseData?.syllabus?.reduce(
+                                (total, module) =>
+                                    total + (module.lessons?.length || 0),
+                                0,
+                            ) || 0;
+                        const savedProgress = Number(enrollment.progress?.percent);
+                        const progressPercent = Number.isFinite(savedProgress)
+                            ? Math.min(100, Math.max(0, savedProgress))
+                            : totalLessons > 0
+                                ? Math.round((completedLessons / totalLessons) * 100)
+                                : 0;
 
                         return (
                             <div
@@ -258,13 +272,13 @@ export default function StudentDashboard() {
                                             </div>
                                             <div className="text-right">
                                                 <p className="text-2xl sm:text-3xl font-bold text-primary">
-                                                    {Math.round((enrollment.progress?.completedLessons?.length / (stats?.courseData?.syllabus?.reduce((acc, m) => acc + (m.lessons?.length || 0), 0))) * 100)}%
+                                                    {progressPercent}%
                                                 </p>
                                             </div>
                                         </div>
                                         <progress
                                             className="progress progress-primary w-full h-4"
-                                            value={enrollment.progress?.percent || 0}
+                                            value={progressPercent}
                                             max="100"
                                         ></progress>
                                         {isExpanded && stats && (

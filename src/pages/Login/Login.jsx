@@ -26,9 +26,17 @@ export default function Login() {
             setError(null);
 
             const res = await loginUser(form);
-            saveToken(res.data.token);
+            const role = res.data.user?.role;
+            if (role !== "admin" && role !== "student") {
+                throw new Error("Your account has an unsupported role.");
+            }
 
-            navigate("/");
+            saveToken(res.data.token);
+            if (role === "admin") {
+                navigate("/admin", { replace: true });
+            } else if (role === "student") {
+                navigate("/student", { replace: true });
+            }
             window.location.reload();
         } catch (err) {
             setError(err.response?.data?.message || "Login failed. Please check your credentials.");

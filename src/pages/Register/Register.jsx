@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { registerUser } from "../../services/auth.api";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export default function Register() {
     const navigate = useNavigate();
@@ -9,6 +10,7 @@ export default function Register() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [showAdminKey, setShowAdminKey] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = (e) =>
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -29,11 +31,17 @@ export default function Register() {
                 payload.adminKey = form.adminKey.trim();
             }
 
-            await registerUser(payload);
+            const response = await registerUser(payload);
+            console.log("Registration successful:", response);
 
-            navigate("/login");
+            if (response.status === 201) {
+                toast.success("Account created successfully!");
+                navigate("/login");
+            } else {
+                setError("Account creation returned an unexpected response.");
+            }
         } catch (err) {
-            setError(err.response?.data?.message || "Register failed");
+            setError(err.response?.data?.message || err.message || "Register failed");
         } finally {
             setLoading(false);
         }
@@ -88,15 +96,25 @@ export default function Register() {
                             <label className="label">
                                 <span className="label-text font-semibold">Password</span>
                             </label>
-                            <input
-                                name="password"
-                                type="password"
-                                value={form.password}
-                                onChange={handleChange}
-                                placeholder="Create a password"
-                                className="input input-bordered w-full focus:input-primary"
-                                required
-                            />
+                            <div className="relative">
+                                <input
+                                    name="password"
+                                    type={showPassword ? "text" : "password"}
+                                    value={form.password}
+                                    onChange={handleChange}
+                                    placeholder="Create a password"
+                                    className="input input-bordered w-full pr-16 focus:input-primary"
+                                    required
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="btn btn-ghost btn-xs absolute right-2 top-1/2 -translate-y-1/2"
+                                    aria-label={showPassword ? "Hide password" : "Show password"}
+                                >
+                                    {showPassword ? "Hide" : "Show"}
+                                </button>
+                            </div>
                         </div>
 
                         {/* Admin Registration Key (Optional) */}

@@ -8,6 +8,7 @@ import {
     ClipboardList,
     BarChart3,
     Video,
+    Home as HomeIcon,
     Menu,
     X,
 } from "lucide-react";
@@ -42,6 +43,7 @@ export default function AdminSidebar() {
     };
 
     const menuItems = [
+        { to: "/", label: "Back to Home", Icon: HomeIcon, end: true },
         { to: "/admin", label: "Overview", Icon: LayoutDashboard, end: true },
         { to: "/admin/courses/create", label: "Add Course", Icon: PlusCircle, end: true },
         { to: "/admin/video-classes", label: "Video Classes", Icon: Video, end: true },

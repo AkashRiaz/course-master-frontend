@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCourseById } from "../../../store/slices/coursesSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { updateCourseAsync } from "../../../store/slices/adminSlice";
+import { Trash2 } from "lucide-react";
 
 export default function EditCourse() {
     const { id } = useParams();
@@ -100,23 +101,28 @@ export default function EditCourse() {
 
     if (detailLoading) {
         return (
-            <div className="flex justify-center py-12">
+            <div className="flex min-h-[50vh] items-center justify-center py-12">
                 <span className="loading loading-spinner loading-lg"></span>
             </div>
         );
     }
 
     return (
-        <div className="max-w-4xl w-full">
-            <h1 className="page-heading mb-4 sm:mb-6">Edit Course</h1>
+        <div className="mx-auto w-full max-w-5xl min-w-0 px-1 sm:px-0">
+            <div className="mb-6">
+                <h1 className="page-heading break-words">Edit Course</h1>
+                <p className="mt-2 text-sm text-base-content/70">
+                    Update the course details, learning modules, and optional live content.
+                </p>
+            </div>
 
             {error && (
-                <div className="alert alert-error mb-4">
+                <div className="alert alert-error mb-6 rounded-xl shadow-md">
                     <span>{error}</span>
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="form-control">
                     <label className="label">
                         <span className="label-text font-semibold">Course Title *</span>
@@ -127,7 +133,7 @@ export default function EditCourse() {
                         value={form.title}
                         onChange={handleChange}
                         placeholder="Enter course title"
-                        className="input input-bordered"
+                        className="input input-bordered w-full focus:input-primary"
                         required
                     />
                 </div>
@@ -141,7 +147,7 @@ export default function EditCourse() {
                         value={form.description}
                         onChange={handleChange}
                         placeholder="Course description"
-                        className="textarea textarea-bordered h-28"
+                        className="textarea textarea-bordered h-32 w-full focus:textarea-primary"
                         required
                     />
                 </div>
@@ -157,7 +163,7 @@ export default function EditCourse() {
                             value={form.instructorName}
                             onChange={handleChange}
                             placeholder="Instructor name"
-                            className="input input-bordered"
+                            className="input input-bordered w-full focus:input-primary"
                             required
                         />
                     </div>
@@ -172,7 +178,7 @@ export default function EditCourse() {
                             value={form.price}
                             onChange={handleChange}
                             placeholder="Price in taka"
-                            className="input input-bordered"
+                            className="input input-bordered w-full focus:input-primary"
                             min="0"
                             required
                         />
@@ -190,7 +196,7 @@ export default function EditCourse() {
                             value={form.category}
                             onChange={handleChange}
                             placeholder="e.g., Web Development"
-                            className="input input-bordered"
+                            className="input input-bordered w-full focus:input-primary"
                         />
                     </div>
 
@@ -204,18 +210,20 @@ export default function EditCourse() {
                             value={form.tags}
                             onChange={handleChange}
                             placeholder="react, javascript, web"
-                            className="input input-bordered"
+                            className="input input-bordered w-full focus:input-primary"
                         />
                     </div>
                 </div>
 
                 {/* Syllabus Section */}
-                <div className="divider">Course Syllabus (Modules & Lessons)</div>
+                <div className="divider text-lg font-bold text-primary">
+                    Course Syllabus (Modules & Lessons)
+                </div>
                 <div className="space-y-4">
                     {form.syllabus.map((module, modIdx) => (
-                        <div key={modIdx} className="card bg-base-100 border border-base-300">
-                            <div className="card-body">
-                                <div className="flex justify-between items-center mb-4">
+                        <div key={modIdx} className="card border border-base-300 bg-base-100 shadow-sm">
+                            <div className="card-body p-4 sm:p-6">
+                                <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                                     <h3 className="font-bold text-lg">Module {modIdx + 1}</h3>
                                     <button
                                         type="button"
@@ -223,9 +231,9 @@ export default function EditCourse() {
                                             const newSyllabus = form.syllabus.filter((_, i) => i !== modIdx);
                                             setForm({ ...form, syllabus: newSyllabus });
                                         }}
-                                        className="btn btn-sm btn-error"
+                                        className="btn btn-sm btn-outline btn-error w-full !text-error shrink-0 sm:w-auto"
                                     >
-                                        Remove Module
+                                        <><Trash2 className="h-4 w-4" /> Remove Module</>
                                     </button>
                                 </div>
 
@@ -242,14 +250,14 @@ export default function EditCourse() {
                                             setForm({ ...form, syllabus: newSyllabus });
                                         }}
                                         placeholder="e.g., Introduction to React"
-                                        className="input input-bordered"
+                                        className="input input-bordered w-full focus:input-primary"
                                         required
                                     />
                                 </div>
 
                                 {/* Lessons */}
                                 <div className="space-y-3">
-                                    <div className="flex justify-between items-center">
+                                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                                         <h4 className="font-semibold">Lessons</h4>
                                         <button
                                             type="button"
@@ -268,16 +276,16 @@ export default function EditCourse() {
                                                 });
                                                 setForm({ ...form, syllabus: newSyllabus });
                                             }}
-                                            className="btn btn-sm btn-outline"
+                                            className="btn btn-sm btn-outline w-full shrink-0 sm:w-auto"
                                         >
                                             + Add Lesson
                                         </button>
                                     </div>
 
                                     {module.lessons?.map((lesson, lesIdx) => (
-                                        <div key={lesIdx} className="card bg-base-200 border border-base-300">
-                                            <div className="card-body">
-                                                <div className="flex justify-between items-center mb-3">
+                                        <div key={lesIdx} className="card border border-base-300 bg-base-200/70 shadow-sm">
+                                            <div className="card-body p-4">
+                                                <div className="mb-3 flex items-center justify-between gap-3">
                                                     <h5 className="font-semibold">Lesson {lesIdx + 1}</h5>
                                                     <button
                                                         type="button"
@@ -286,9 +294,9 @@ export default function EditCourse() {
                                                             newSyllabus[modIdx].lessons = newSyllabus[modIdx].lessons.filter((_, i) => i !== lesIdx);
                                                             setForm({ ...form, syllabus: newSyllabus });
                                                         }}
-                                                        className="btn btn-xs btn-error"
+                                                        className="btn btn-xs btn-outline btn-error w-full !text-error shrink-0 sm:w-auto"
                                                     >
-                                                        Remove
+                                                        <><Trash2 className="h-3.5 w-3.5" /> Remove</>
                                                     </button>
                                                 </div>
 
@@ -316,7 +324,7 @@ export default function EditCourse() {
                                                                 setForm({ ...form, syllabus: newSyllabus });
                                                             }}
                                                             placeholder="e.g., Setting up React"
-                                                            className="input input-bordered input-sm"
+                                                            className="input input-bordered input-sm w-full focus:input-primary"
                                                             required
                                                         />
                                                     </div>
@@ -344,14 +352,14 @@ export default function EditCourse() {
                                                                 setForm({ ...form, syllabus: newSyllabus });
                                                             }}
                                                             placeholder="https://www.youtube.com/watch?v=..."
-                                                            className="input input-bordered input-sm"
+                                                            className="input input-bordered input-sm w-full focus:input-primary"
                                                             required
                                                         />
                                                     </div>
 
                                                     {/* Live Class Section */}
                                                     <div className="form-control">
-                                                        <div className="flex justify-between items-center mb-2">
+                                                        <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                                                             <label className="label py-0">
                                                                 <span className="label-text font-semibold">Live Class (Optional)</span>
                                                             </label>
@@ -377,7 +385,7 @@ export default function EditCourse() {
                                                                         });
                                                                         setForm({ ...form, syllabus: newSyllabus });
                                                                     }}
-                                                                    className="btn btn-sm btn-outline btn-info"
+                                                                    className="btn btn-sm btn-outline btn-info w-full shrink-0 sm:w-auto"
                                                                 >
                                                                     + Add Live Class
                                                                 </button>
@@ -400,9 +408,9 @@ export default function EditCourse() {
                                                                         });
                                                                         setForm({ ...form, syllabus: newSyllabus });
                                                                     }}
-                                                                    className="btn btn-sm btn-ghost btn-error"
+                                                                    className="btn btn-sm btn-ghost btn-error w-full !text-error shrink-0 sm:w-auto"
                                                                 >
-                                                                    Remove Live Class
+                                                                    <><Trash2 className="h-4 w-4" /> Remove Live Class</>
                                                                 </button>
                                                             )}
                                                         </div>
@@ -430,7 +438,7 @@ export default function EditCourse() {
                                                                         setForm({ ...form, syllabus: newSyllabus });
                                                                     }}
                                                                     placeholder="https://meet.google.com/xxx-xxxx-xxx or https://zoom.us/j/xxxxx"
-                                                                    className="input input-bordered input-sm w-full"
+                                                                    className="input input-bordered input-sm w-full focus:input-primary"
                                                                 />
                                                                 <input
                                                                     type="datetime-local"
@@ -453,7 +461,7 @@ export default function EditCourse() {
                                                                         });
                                                                         setForm({ ...form, syllabus: newSyllabus });
                                                                     }}
-                                                                    className="input input-bordered input-sm w-full"
+                                                                    className="input input-bordered input-sm w-full focus:input-primary"
                                                                 />
                                                             </div>
                                                         )}
@@ -461,7 +469,7 @@ export default function EditCourse() {
 
                                                     {/* Assignment Section */}
                                                     <div className="form-control">
-                                                        <div className="flex justify-between items-center mb-2">
+                                                        <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                                                             <label className="label py-0">
                                                                 <span className="label-text font-semibold">Assignment</span>
                                                             </label>
@@ -486,7 +494,7 @@ export default function EditCourse() {
                                                                         });
                                                                         setForm({ ...form, syllabus: newSyllabus });
                                                                     }}
-                                                                    className="btn btn-sm btn-outline btn-secondary"
+                                                                    className="btn btn-sm btn-outline btn-secondary w-full shrink-0 sm:w-auto"
                                                                 >
                                                                     + Add Assignment
                                                                 </button>
@@ -509,9 +517,9 @@ export default function EditCourse() {
                                                                         });
                                                                         setForm({ ...form, syllabus: newSyllabus });
                                                                     }}
-                                                                    className="btn btn-sm btn-ghost btn-error"
+                                                                    className="btn btn-sm btn-ghost btn-error w-full !text-error shrink-0 sm:w-auto"
                                                                 >
-                                                                    Remove Assignment
+                                                                    <><Trash2 className="h-4 w-4" /> Remove Assignment</>
                                                                 </button>
                                                             )}
                                                         </div>
@@ -540,7 +548,7 @@ export default function EditCourse() {
                                                                     setForm({ ...form, syllabus: newSyllabus });
                                                                 }}
                                                                 placeholder="Enter assignment instructions..."
-                                                                className="textarea textarea-bordered textarea-sm w-full"
+                                                                className="textarea textarea-bordered textarea-sm w-full focus:textarea-primary"
                                                                 rows="3"
                                                             />
                                                         )}
@@ -548,7 +556,7 @@ export default function EditCourse() {
 
                                                     {/* Quiz Section */}
                                                     <div className="form-control">
-                                                        <div className="flex justify-between items-center mb-2">
+                                                        <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                                                             <label className="label">
                                                                 <span className="label-text">Quiz Questions (Optional)</span>
                                                             </label>
@@ -566,7 +574,7 @@ export default function EditCourse() {
                                                                     });
                                                                     setForm({ ...form, syllabus: newSyllabus });
                                                                 }}
-                                                                className="btn btn-xs btn-outline"
+                                                                className="btn btn-xs btn-outline w-full shrink-0 sm:w-auto"
                                                             >
                                                                 + Add Question
                                                             </button>
@@ -575,7 +583,7 @@ export default function EditCourse() {
                                                         {lesson.quiz?.map((quizItem, qIdx) => (
                                                             <div key={qIdx} className="card bg-base-300 border border-base-400 mb-2">
                                                                 <div className="card-body p-3">
-                                                                    <div className="flex justify-between items-center mb-2">
+                                                                    <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                                                                         <span className="text-sm font-semibold">Question {qIdx + 1}</span>
                                                                         <button
                                                                             type="button"
@@ -584,9 +592,9 @@ export default function EditCourse() {
                                                                                 newSyllabus[modIdx].lessons[lesIdx].quiz = newSyllabus[modIdx].lessons[lesIdx].quiz.filter((_, i) => i !== qIdx);
                                                                                 setForm({ ...form, syllabus: newSyllabus });
                                                                             }}
-                                                                            className="btn btn-xs btn-error"
+                                                                            className="btn btn-xs btn-error !text-error"
                                                                         >
-                                                                            Remove
+                                                                            <><Trash2 className="h-3.5 w-3.5" /> Remove</>
                                                                         </button>
                                                                     </div>
 
@@ -599,7 +607,7 @@ export default function EditCourse() {
                                                                             setForm({ ...form, syllabus: newSyllabus });
                                                                         }}
                                                                         placeholder="Enter question"
-                                                                        className="input input-bordered input-sm mb-2"
+                                                                        className="input input-bordered input-sm mb-2 focus:input-primary"
                                                                     />
 
                                                                     <div className="space-y-1">
@@ -625,7 +633,7 @@ export default function EditCourse() {
                                                                                         setForm({ ...form, syllabus: newSyllabus });
                                                                                     }}
                                                                                     placeholder={`Option ${optIdx + 1}`}
-                                                                                    className="input input-bordered input-sm flex-1"
+                                                                                    className="input input-bordered input-sm w-full flex-1 focus:input-primary"
                                                                                 />
                                                                             </div>
                                                                         ))}
@@ -651,7 +659,7 @@ export default function EditCourse() {
                                 syllabus: [...form.syllabus, { title: "", lessons: [] }],
                             });
                         }}
-                        className="btn btn-outline btn-sm w-full"
+                        className="btn btn-sm btn-outline w-full sm:w-auto"
                     >
                         + Add Module
                     </button>
@@ -673,7 +681,7 @@ export default function EditCourse() {
                                             value={batch.name || ""}
                                             onChange={(e) => updateBatch(idx, "name", e.target.value)}
                                             placeholder="e.g., Batch 1, Jan 2025"
-                                            className="input input-bordered input-sm"
+                                            className="input input-bordered input-sm w-full focus:input-primary"
                                         />
                                     </div>
 
@@ -685,7 +693,7 @@ export default function EditCourse() {
                                             type="date"
                                             value={batch.startDate ? (typeof batch.startDate === 'string' ? batch.startDate.split("T")[0] : new Date(batch.startDate).toISOString().split("T")[0]) : ""}
                                             onChange={(e) => updateBatch(idx, "startDate", e.target.value)}
-                                            className="input input-bordered input-sm"
+                                            className="input input-bordered input-sm w-full focus:input-primary"
                                         />
                                     </div>
                                 </div>
@@ -693,9 +701,9 @@ export default function EditCourse() {
                                 <button
                                     type="button"
                                     onClick={() => removeBatch(idx)}
-                                    className="btn btn-sm btn-error mt-2"
+                                    className="btn btn-sm btn-outline btn-error mt-2 w-full !text-error sm:w-auto"
                                 >
-                                    Remove Batch
+                                    <><Trash2 className="h-4 w-4" /> Remove Batch</>
                                 </button>
                             </div>
                         </div>
@@ -704,17 +712,17 @@ export default function EditCourse() {
                     <button
                         type="button"
                         onClick={addBatch}
-                        className="btn btn-outline btn-sm"
+                        className="btn btn-outline btn-sm w-full sm:w-auto"
                     >
                         + Add Batch
                     </button>
                 </div>
 
-                <div className="flex gap-3 pt-6">
+                <div className="flex flex-col gap-3 pt-6 sm:flex-row">
                     <button
                         type="submit"
                         disabled={creating}
-                        className="btn btn-primary flex-1"
+                        className="btn btn-primary flex-1 shadow-md"
                     >
                         {creating ? (
                             <>
@@ -729,7 +737,7 @@ export default function EditCourse() {
                     <button
                         type="button"
                         onClick={() => navigate("/admin/courses")}
-                        className="btn btn-outline"
+                        className="btn btn-outline flex-1"
                     >
                         Cancel
                     </button>

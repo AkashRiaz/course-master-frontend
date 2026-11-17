@@ -12,11 +12,13 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.0",
     "@tailwindcss/vite": "^4.1.17",
+    "@tanstack/react-table": "^8.21.3",
     "axios": "^1.13.2",
     "daisyui": "^5.5.8",
     "lucide-react": "^0.555.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-hot-toast": "^2.6.1",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.10.1",
     "recharts": "^3.5.1"

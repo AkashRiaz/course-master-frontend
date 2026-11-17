@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
+import { Toaster } from "react-hot-toast";
 import MainLayout from "./layouts/MainLayout";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
@@ -10,6 +11,7 @@ import CourseDetails from "./pages/CousrseDetails/CourseDetails";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import NotFound from "./pages/NotFound/NotFound";
+import Profile from "./pages/Profile/Profile";
 
 // Lazy load heavy components for code splitting
 const CoursePlayer = lazy(() => import("./pages/CoursePlayer/CoursePlayer"));
@@ -35,6 +37,7 @@ const LoadingSpinner = () => (
 export default function App() {
   return (
     <BrowserRouter>
+      <Toaster position="top-center" />
       <Routes>
         {/* Main public layout */}
         <Route element={<MainLayout />}>
@@ -44,6 +47,14 @@ export default function App() {
           <Route path="/courses/:id" element={<CourseDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
 
           {/* student dashboard (protected) */}
           <Route
